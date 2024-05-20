@@ -5,6 +5,12 @@
             "title": "Test",
             "content": "hello world",
             "last-opened": "2024-05-20 12:40:00Z"
+        },
+        {
+            "id": 2,
+            "title": "Toinen",
+            "content": "Näkyykö lista",
+            "last-opened": "2024-05-19 15:23:12Z"
         }
     ]
 }
