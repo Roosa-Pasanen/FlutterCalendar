@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
+import 'Note.dart';
 import 'package:flutter/services.dart';
 
 class NoteEditing extends StatefulWidget {
