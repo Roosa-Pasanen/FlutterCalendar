@@ -10,20 +10,42 @@ class MyWidget extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<MyWidget> {
-  List items = [];
+  List _items = [];
 
   Future<void> readJson() async {
     final String response = await rootBundle.loadString('assets/notes.json');
     final data = await json.decode(response);
     print(data);
     setState(() {
-      items = data["notes"];
+      _items = data["notes"];
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-        onPressed: readJson, child: const Text("show content"));
+    return Column(
+      children: [
+        ElevatedButton(
+          onPressed: readJson,
+          child: const Text("show content"),
+        ),
+        _items.isNotEmpty
+            ? Expanded(
+                child: ListView.builder(
+                  itemCount: _items.length,
+                  itemBuilder: (context, index) {
+                    return Card(
+                      margin: const EdgeInsets.all(10),
+                      child: ListTile(
+                        title: Text(_items[index]["title"]),
+                        subtitle: Text(_items[index]["content"]),
+                      ),
+                    );
+                  },
+                ),
+              )
+            : Container()
+      ],
+    );
   }
 }
