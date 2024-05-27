@@ -2,24 +2,33 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'Note.dart';
 import 'package:flutter/services.dart';
+import "json_helper.dart";
 
 class NoteEditing extends StatefulWidget {
   final String title;
   final String content;
-  const NoteEditing({super.key, required this.title, required this.content});
+  final String fileCreated;
+  const NoteEditing(
+      {super.key,
+      required this.title,
+      required this.content,
+      required this.fileCreated});
 
   @override
-  State<NoteEditing> createState() =>
-      _NoteEditingState(title: title, content: content);
+  State<NoteEditing> createState() => _NoteEditingState(
+      title: title, content: content, fileCreated: fileCreated);
 }
 
 class _NoteEditingState extends State<NoteEditing> {
   final String title;
   final String content;
+  final String lastOpened = DateTime.now().toString();
+  final String fileCreated;
   final TextEditingController titleController = TextEditingController();
   final TextEditingController contentController = TextEditingController();
 
-  _NoteEditingState({required this.title, required this.content});
+  _NoteEditingState(
+      {required this.title, required this.content, required this.fileCreated});
 
   @override
   void initState() {
@@ -47,18 +56,21 @@ class _NoteEditingState extends State<NoteEditing> {
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
               filled: true,
-              fillColor: Colors.blueAccent,
+              fillColor: const Color.fromARGB(255, 164, 171, 184),
               hintText: "New title"),
         ),
         centerTitle: true,
         actions: <Widget>[
-          IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(Icons.arrow_back),
-            tooltip: "Return",
-          )
+          ElevatedButton(
+              onPressed: () async {
+                writeFile({
+                  "title": titleController.text,
+                  "content": contentController.text,
+                  "last-opened": lastOpened,
+                  "file-created": fileCreated,
+                });
+              },
+              child: Text("Save"))
         ],
       ),
       body: Center(

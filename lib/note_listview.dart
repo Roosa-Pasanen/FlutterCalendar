@@ -1,24 +1,38 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
+import "note_view.dart";
 import "note_edit.dart";
+import "json_helper.dart";
 
-class MyWidget extends StatefulWidget {
-  const MyWidget({super.key});
+class NoteList extends StatefulWidget {
+  const NoteList({super.key});
 
   @override
-  State<MyWidget> createState() => _MyWidgetState();
+  State<NoteList> createState() => _NoteListState();
 }
 
-class _MyWidgetState extends State<MyWidget> {
+class _NoteListState extends State<NoteList> {
   List _items = [];
 
   Future<void> readJson() async {
-    final String response = await rootBundle.loadString('assets/notes.json');
-    final data = await json.decode(response);
-    setState(() {
-      _items = data["notes"];
-    });
+    try {
+      final File file = await fetchFile();
+      final String response = file.readAsStringSync();
+      final data = await json.decode(response);
+      setState(() {
+        _items = data["notes"];
+      });
+    } on PathNotFoundException {
+      final File file = await createFile();
+      final String response = file.readAsStringSync();
+      final data = await json.decode(response);
+      setState(() {
+        _items = data["notes"];
+      });
+    }
   }
 
   @override
@@ -34,13 +48,20 @@ class _MyWidgetState extends State<MyWidget> {
           title: const Text("View notes"),
           centerTitle: true,
           actions: <Widget>[
-            IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: const Icon(Icons.arrow_back),
-              tooltip: "Return",
-            )
+            ElevatedButton(
+                onPressed: () async {
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NoteEditing(
+                        title: "",
+                        content: "",
+                        fileCreated: DateTime.now().toString(),
+                      ),
+                    ),
+                  );
+                },
+                child: Text("New"))
           ],
         ),
         body: Column(
@@ -55,13 +76,14 @@ class _MyWidgetState extends State<MyWidget> {
                             child: ElevatedButton(
                               onPressed: () async {
                                 await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => NoteEditing(
-                                        title: _items[index]["title"],
-                                        content: _items[index]["content"]),
-                                  ),
-                                );
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => NoteView(
+                                          title: _items[index]["title"],
+                                          content: _items[index]["content"],
+                                          fileCreated: _items[index]
+                                              ["file-created"]),
+                                    )).then((value) => readJson());
                               },
                               child: ListTile(
                                 title: Text(_items[index]["title"]),

@@ -1,22 +1,46 @@
+/*int idCount = 0;
+
+void createNewNote(title, content) {
+  final note = Note(
+      id: idCount,
+      title: title,
+      content: content,
+      lastOpened: DateTime.now(),
+      fileCreated: DateTime.now());
+  idCount++;
+
+}*/
+
 class Note {
-  final int id;
+  //final int id;
   final String title;
   final String content;
+  DateTime lastOpened = DateTime.now();
+  DateTime fileCreated = DateTime.now();
 
-  Note(this.id, this.title, this.content);
+  Note(
+      {required this.title,
+      required this.content,
+      required this.lastOpened,
+      required this.fileCreated});
 
   Note.fromJson(Map<String, dynamic> json)
-      : id = json['id'] as int,
-        title = json['title'] as String,
-        content = json['content'] as String;
+      : title = json['title'] as String,
+        content = json['content'] as String,
+        lastOpened = DateTime.parse(json['last-opened']) as DateTime,
+        fileCreated = DateTime.parse(json['file-created']) as DateTime;
 
-  Map<String, dynamic> toJson() =>
-      {'id': id, 'title': title, 'content': content};
+  Map<String, dynamic> toJson() => {
+        'title': title,
+        'content': content,
+        'last-opened': lastOpened,
+        'file-created': fileCreated,
+      };
+
+  String toJsonString() => """{
+    "title": "$title",
+    "content": "$content",
+    "last-opened": "$lastOpened",
+    "file-created": "$fileCreated"
+  }""";
 }
-
-/*
-final DateTime lastOpened;
-this.lastOpened
-lastOpened = json['last-opened'] as DateTime;
-'last-opened': lastOpened
-*/
