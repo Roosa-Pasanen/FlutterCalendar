@@ -47,21 +47,20 @@ class _NoteEditingState extends State<NoteEditing> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: TextField(
-          textDirection: TextDirection.ltr,
-          controller: titleController,
-          keyboardType: TextInputType.emailAddress,
-          decoration: InputDecoration(
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-              filled: true,
-              fillColor: const Color.fromARGB(255, 164, 171, 184),
-              hintText: "New title"),
-        ),
-        centerTitle: true,
-        actions: <Widget>[
-          ElevatedButton(
+        appBar: AppBar(
+          title: TextField(
+            textDirection: TextDirection.ltr,
+            controller: titleController,
+            keyboardType: TextInputType.emailAddress,
+            decoration: InputDecoration(
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                hintText: "New title"),
+          ),
+          centerTitle: true,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.save),
               onPressed: () async {
                 writeFile({
                   "title": titleController.text,
@@ -70,16 +69,17 @@ class _NoteEditingState extends State<NoteEditing> {
                   "file-created": fileCreated,
                 });
               },
-              child: Text("Save"))
-        ],
-      ),
-      body: Center(
-          child: Column(
-        // mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const SizedBox(height: 30),
-          Expanded(
-              child: Container(
+            )
+          ],
+        ),
+        body: Center(
+            child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          padding: EdgeInsets.all(10),
+          child: Container(
+            width: double.infinity,
+            padding: EdgeInsets.all(10),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 color: Colors.blueAccent),
@@ -89,10 +89,7 @@ class _NoteEditingState extends State<NoteEditing> {
               keyboardType: TextInputType.multiline,
               maxLines: null,
             ),
-          )),
-          const SizedBox(height: 20),
-        ],
-      )),
-    );
+          ),
+        )));
   }
 }
