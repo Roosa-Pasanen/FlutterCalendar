@@ -48,7 +48,7 @@ class NoteView extends StatelessWidget {
               padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Colors.blueAccent),
+                  color: Theme.of(context).colorScheme.secondaryContainer),
               child: Text(content),
             ),
           ),

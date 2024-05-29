@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'themes.dart';
+import 'package:provider/provider.dart';
 import "note_listview.dart";
 
 class SettingsScreen extends StatelessWidget {
@@ -71,22 +73,39 @@ class SettingsToggle extends StatefulWidget {
 }
 
 class _SettingsToggleState extends State<SettingsToggle> {
-  bool light = true;
+  bool light = false;
 
-  void toggleTheme(bool value) async {
+  void toggleTheme(bool value, ThemeNotifier theme) async {
+    if (value) {
+      theme.setDarkMode();
+    } else
+      theme.setLightMode();
+  }
+
+  void initState() {
+    switchInitState();
+    super.initState();
+  }
+
+  void switchInitState() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('Dark mode', value);
+    if (prefs.get("darkTheme") == true) {
+      light = true;
+    } else {
+      light = false;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Switch(
-        value: light,
-        onChanged: (bool value) {
-          toggleTheme(value);
-          setState(() {
-            light = value;
-          });
-        });
+    return Consumer<ThemeNotifier>(
+        builder: (context, theme, _) => Switch(
+            value: light,
+            onChanged: (bool value) {
+              toggleTheme(value, theme);
+              setState(() {
+                light = value;
+              });
+            }));
   }
 }

@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'note_listview.dart';
+import 'themes.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MainApp());
+  return runApp(ChangeNotifierProvider<ThemeNotifier>(
+    create: (_) => ThemeNotifier(),
+    child: MainApp(),
+  ));
 }
 
 class MainApp extends StatelessWidget {
@@ -10,7 +15,9 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: MainPage());
+    return Consumer<ThemeNotifier>(
+        builder: (context, theme, _) =>
+            MaterialApp(theme: theme.getTheme(), home: MainPage()));
   }
 }
 

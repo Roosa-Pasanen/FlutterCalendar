@@ -53,6 +53,8 @@ class _NoteEditingState extends State<NoteEditing> {
             controller: titleController,
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
+                fillColor: Theme.of(context).colorScheme.secondaryContainer,
+                filled: true,
                 border:
                     OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                 hintText: "New title"),
@@ -82,7 +84,7 @@ class _NoteEditingState extends State<NoteEditing> {
             padding: EdgeInsets.all(10),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: Colors.blueAccent),
+                color: Theme.of(context).colorScheme.secondaryContainer),
             child: TextField(
               textDirection: TextDirection.ltr,
               controller: contentController,

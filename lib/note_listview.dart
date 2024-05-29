@@ -16,6 +16,7 @@ class NoteListView extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: const Text("View notes"),
+          backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
           centerTitle: true,
           leading: Builder(
             builder: (context) {
@@ -49,9 +50,9 @@ class NoteListView extends StatelessWidget {
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
-              const DrawerHeader(
+              DrawerHeader(
                 decoration: BoxDecoration(
-                  color: Colors.blue,
+                  color: Theme.of(context).colorScheme.secondaryContainer,
                 ),
                 child: Text('Notes app'),
               ),
@@ -119,6 +120,7 @@ class _NoteListState extends State<NoteList> {
                   itemCount: _items.length,
                   itemBuilder: (context, index) {
                     return Card(
+                        color: Theme.of(context).colorScheme.primaryContainer,
                         margin: const EdgeInsets.all(10),
                         child: TextButton(
                           onPressed: () async {
