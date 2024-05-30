@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'Note.dart';
+import 'package:flutter_calendar/note_listview.dart';
 import "note_edit.dart";
-import 'package:flutter/services.dart';
+import 'json_helper.dart';
 
 class NoteView extends StatelessWidget {
   final String title;
@@ -22,7 +21,7 @@ class NoteView extends StatelessWidget {
           centerTitle: true,
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.edit),
+              icon: const Icon(Icons.edit),
               onPressed: () async {
                 await Navigator.push(
                   context,
@@ -35,17 +34,32 @@ class NoteView extends StatelessWidget {
                   ),
                 ).then((value) => null);
               },
-            )
+            ),
+            IconButton(
+                icon: const Icon(Icons.delete),
+                onPressed: () async {
+                  deleteEntry({
+                    "title": title,
+                    "content": content,
+                    "last-opened": DateTime.now().toString(),
+                    "file-created": fileCreated,
+                  }).then((value) => {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const NoteListView())),
+                      });
+                })
           ],
         ),
         body: Center(
           child: Container(
             width: double.infinity,
             height: double.infinity,
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: Container(
               width: double.infinity,
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: Theme.of(context).colorScheme.secondaryContainer),

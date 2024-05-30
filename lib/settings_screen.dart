@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'themes.dart';
 import 'package:provider/provider.dart';
 import "note_listview.dart";
@@ -11,7 +10,7 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Settings"),
+          title: const Text("Settings"),
           centerTitle: true,
           leading: Builder(
             builder: (context) {
@@ -37,13 +36,15 @@ class SettingsScreen extends StatelessWidget {
               ListTile(
                 title: const Text('Notes'),
                 onTap: () async {
-                  await Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => NoteListView()));
+                  await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const NoteListView()));
                   Navigator.pop(context);
                 },
               ),
-              ListTile(
-                title: const Text('Settings'),
+              const ListTile(
+                title: Text('Settings'),
               ),
             ],
           ),
@@ -53,11 +54,11 @@ class SettingsScreen extends StatelessWidget {
             Container(
               height: 50,
             ),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text("Dark mode"),
-                Container(child: SettingsToggle()),
+                SettingsToggle(),
               ],
             )
           ],
@@ -78,21 +79,8 @@ class _SettingsToggleState extends State<SettingsToggle> {
   void toggleTheme(bool value, ThemeNotifier theme) async {
     if (value) {
       theme.setDarkMode();
-    } else
-      theme.setLightMode();
-  }
-
-  void initState() {
-    switchInitState();
-    super.initState();
-  }
-
-  void switchInitState() async {
-    final prefs = await SharedPreferences.getInstance();
-    if (prefs.get("darkTheme") == true) {
-      light = true;
     } else {
-      light = false;
+      theme.setLightMode();
     }
   }
 

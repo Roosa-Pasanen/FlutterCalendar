@@ -27,8 +27,8 @@ class Note {
   Note.fromJson(Map<String, dynamic> json)
       : title = json['title'] as String,
         content = json['content'] as String,
-        lastOpened = DateTime.parse(json['last-opened']) as DateTime,
-        fileCreated = DateTime.parse(json['file-created']) as DateTime;
+        lastOpened = DateTime.parse(json['last-opened']),
+        fileCreated = DateTime.parse(json['file-created']);
 
   Map<String, dynamic> toJson() => {
         'title': title,

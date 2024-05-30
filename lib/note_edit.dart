@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'Note.dart';
-import 'package:flutter/services.dart';
 import "json_helper.dart";
+import 'note_listview.dart';
 
 class NoteEditing extends StatefulWidget {
   final String title;
@@ -62,14 +60,19 @@ class _NoteEditingState extends State<NoteEditing> {
           centerTitle: true,
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.save),
+              icon: const Icon(Icons.save),
               onPressed: () async {
-                writeFile({
+                await saveEntry({
                   "title": titleController.text,
                   "content": contentController.text,
                   "last-opened": lastOpened,
                   "file-created": fileCreated,
-                });
+                }).then((value) => {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const NoteListView())),
+                    });
               },
             )
           ],
@@ -78,10 +81,10 @@ class _NoteEditingState extends State<NoteEditing> {
             child: Container(
           width: double.infinity,
           height: double.infinity,
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: Container(
             width: double.infinity,
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 color: Theme.of(context).colorScheme.secondaryContainer),

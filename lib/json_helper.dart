@@ -1,18 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/services.dart';
 import 'package:flutter_calendar/note.dart';
 import 'package:path_provider/path_provider.dart';
 
 Future<File> fetchFile() async {
   final directory = await getApplicationDocumentsDirectory();
-  final fileName = "notes.json";
-  return await File("${directory.path}/$fileName");
+  const fileName = "notes.json";
+  return File("${directory.path}/$fileName");
 }
 
 Future<File> createFile() async {
   final directory = await getApplicationDocumentsDirectory();
-  final fileName = "notes.json";
+  const fileName = "notes.json";
   File file = await File("${directory.path}/$fileName").create();
   await file.writeAsString("""{
     "notes": [
@@ -25,16 +24,39 @@ Future<File> createFile() async {
 
 Future<List> fileList() async {
   final directory = await getApplicationDocumentsDirectory();
-  final fileName = "notes.json";
-  final file = await File("${directory.path}/$fileName");
+  const fileName = "notes.json";
+  final file = File("${directory.path}/$fileName");
   final String response = file.readAsStringSync();
   final data = await json.decode(response);
   return data["notes"];
 }
 
-Future<void> writeFile(obj) async {
+Future<void> deleteEntry(obj) async {
   List<Note> noteList = [];
-  int? updateIndex = null;
+  int? updateIndex;
+  List objectList = await fileList();
+
+  objectList.forEach((element) {
+    noteList.add(Note.fromJson(element));
+  });
+  Note toDelete = Note.fromJson(obj);
+
+  noteList.forEach((element) {
+    if (element.fileCreated == toDelete.fileCreated) {
+      updateIndex = noteList.indexOf(element);
+    }
+  });
+
+  if (updateIndex != null) {
+    noteList.removeAt(updateIndex!);
+  }
+
+  await writeFile(noteList);
+}
+
+Future<void> saveEntry(obj) async {
+  List<Note> noteList = [];
+  int? updateIndex;
   List objectList = await fileList();
 
   objectList.forEach((element) {
@@ -49,15 +71,15 @@ Future<void> writeFile(obj) async {
   });
 
   if (updateIndex != null) {
-    noteList[updateIndex!] = toUpdate;
-  } else {
-    noteList.add(toUpdate);
+    noteList.removeAt(updateIndex!);
   }
 
-  noteList.forEach((element) {
-    print(element.toJson().toString());
-  });
+  noteList.insert(0, toUpdate);
 
+  await writeFile(noteList);
+}
+
+Future<void> writeFile(List<Note> noteList) async {
   String stringList = "";
 
   noteList.forEach((element) {
@@ -76,7 +98,6 @@ Future<void> writeFile(obj) async {
   }
   """;
 
-  String altogether = start + stringList + end;
-  print(altogether);
-  await file.writeAsString(altogether);
+  String jsonString = start + stringList + end;
+  await file.writeAsString(jsonString);
 }

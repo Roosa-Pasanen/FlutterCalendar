@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/services.dart';
-import 'package:path_provider/path_provider.dart';
 import "note_view.dart";
 import "note_edit.dart";
 import "json_helper.dart";
@@ -54,10 +52,10 @@ class NoteListView extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.secondaryContainer,
                 ),
-                child: Text('Notes app'),
+                child: const Text('Notes app'),
               ),
-              ListTile(
-                title: const Text('Notes'),
+              const ListTile(
+                title: Text('Notes'),
               ),
               ListTile(
                 title: const Text('Settings'),
@@ -65,14 +63,14 @@ class NoteListView extends StatelessWidget {
                   await Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => SettingsScreen()));
+                          builder: (context) => const SettingsScreen()));
                   Navigator.pop(context);
                 },
               ),
             ],
           ),
         ),
-        body: NoteList());
+        body: const NoteList());
   }
 }
 
@@ -142,17 +140,15 @@ class _NoteListState extends State<NoteList> {
                   },
                 ),
               )
-            : Center(
+            : const Center(
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                     SizedBox(height: 50),
-                    Container(
-                      child: const Text("""
+                    Text("""
                   It seems like you don't have any notes.
                   Create a note by pressing the + button.
                   """),
-                    )
                   ]))
       ],
     );

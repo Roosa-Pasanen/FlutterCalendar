@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 void main() {
   return runApp(ChangeNotifierProvider<ThemeNotifier>(
     create: (_) => ThemeNotifier(),
-    child: MainApp(),
+    child: const MainApp(),
   ));
 }
 
@@ -17,7 +17,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<ThemeNotifier>(
         builder: (context, theme, _) =>
-            MaterialApp(theme: theme.getTheme(), home: MainPage()));
+            MaterialApp(theme: theme.getTheme(), home: const MainPage()));
   }
 }
 
