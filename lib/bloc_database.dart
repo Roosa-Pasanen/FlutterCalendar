@@ -3,12 +3,16 @@ import 'dart:io';
 import 'package:flutter_calendar/note.dart';
 import 'package:path_provider/path_provider.dart';
 
+/// Fetch the existing notes.json file.
+/// Returns the notes.json file
 Future<File> fetchFile() async {
   final directory = await getApplicationDocumentsDirectory();
   const fileName = "notes.json";
   return File("${directory.path}/$fileName");
 }
 
+/// Create a new notes.json file.
+/// Returns the new notes.json file initialized with a "notes" table.
 Future<File> createFile() async {
   final directory = await getApplicationDocumentsDirectory();
   const fileName = "notes.json";
@@ -22,19 +26,29 @@ Future<File> createFile() async {
   return file;
 }
 
-Future<List> fileList() async {
-  final directory = await getApplicationDocumentsDirectory();
-  const fileName = "notes.json";
-  final file = File("${directory.path}/$fileName");
-  final String response = file.readAsStringSync();
-  final data = await json.decode(response);
-  return data["notes"];
+/// Fetch data from a file's notes table.
+/// Returns the contents of the notes table.
+Future<List> fetchData() async {
+  try {
+    final File file = await fetchFile();
+    final String response = file.readAsStringSync();
+    final data = await json.decode(response);
+    return data["notes"];
+  } on PathNotFoundException {
+    // If path doesn't exist
+    final File file = await createFile();
+    final String response = file.readAsStringSync();
+    final data = await json.decode(response);
+    return data["notes"];
+  }
 }
 
+/// Delete entry from json data.
+/// Takes the entry to be deleted as an argument.
 Future<void> deleteEntry(obj) async {
   List<Note> noteList = [];
   int? updateIndex;
-  List objectList = await fileList();
+  List objectList = await fetchData();
 
   objectList.forEach((element) {
     noteList.add(Note.fromJson(element));
@@ -54,10 +68,12 @@ Future<void> deleteEntry(obj) async {
   await writeFile(noteList);
 }
 
+/// Saves an entry to the json data
+/// Takes the entry to be saved as an argument
 Future<void> saveEntry(obj) async {
   List<Note> noteList = [];
-  int? updateIndex;
-  List objectList = await fileList();
+  int? updateIndex; // If null, the entry is new
+  List objectList = await fetchData();
 
   objectList.forEach((element) {
     noteList.add(Note.fromJson(element));
@@ -79,6 +95,8 @@ Future<void> saveEntry(obj) async {
   await writeFile(noteList);
 }
 
+/// Writes a list of notes into json-format
+/// Takes the list to be converted as the argument
 Future<void> writeFile(List<Note> noteList) async {
   String stringList = "";
 

@@ -84,27 +84,17 @@ class NoteList extends StatefulWidget {
 class _NoteListState extends State<NoteList> {
   List _items = [];
 
-  Future<void> readJson() async {
-    try {
-      final File file = await fetchFile();
-      final String response = file.readAsStringSync();
-      final data = await json.decode(response);
-      setState(() {
-        _items = data["notes"];
-      });
-    } on PathNotFoundException {
-      final File file = await createFile();
-      final String response = file.readAsStringSync();
-      final data = await json.decode(response);
-      setState(() {
-        _items = data["notes"];
-      });
-    }
+  Future<void> populateList() async {
+    fetchData().then((value) => {
+          setState(() {
+            _items = value;
+          })
+        });
   }
 
   @override
   void initState() {
-    readJson();
+    populateList();
     super.initState();
   }
 
@@ -130,7 +120,7 @@ class _NoteListState extends State<NoteList> {
                                       content: _items[index]["content"],
                                       fileCreated: _items[index]
                                           ["file-created"]),
-                                )).then((value) => readJson());
+                                )).then((value) => populateList());
                           },
                           child: ListTile(
                             title: Text(_items[index]["title"]),
