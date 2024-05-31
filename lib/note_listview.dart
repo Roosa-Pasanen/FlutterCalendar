@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import "note_view.dart";
 import "note_edit.dart";
-import "json_helper.dart";
+import "bloc_database.dart";
 import "settings_screen.dart";
 
 class NoteListView extends StatelessWidget {

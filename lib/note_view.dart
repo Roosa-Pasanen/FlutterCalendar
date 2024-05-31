@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_calendar/note_listview.dart';
 import "note_edit.dart";
-import 'json_helper.dart';
+import 'bloc_database.dart';
 
 class NoteView extends StatelessWidget {
   final String title;

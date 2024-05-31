@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'note_listview.dart';
-import 'themes.dart';
+import 'bloc_theme.dart';
 import 'package:provider/provider.dart';
 
 void main() {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import "json_helper.dart";
+import "bloc_database.dart";
 import 'note_listview.dart';
 
 class NoteEditing extends StatefulWidget {
